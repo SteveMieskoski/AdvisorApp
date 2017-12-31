@@ -1,0 +1,55 @@
+<style>
+  .good {
+    background-color: green !important;
+  }
+
+  .neutral {
+    background-color: yellow !important;
+  }
+
+  .negative {
+    background-color: red !important;
+  }
+  .ui-grid-menu-button {
+    height: 31px;
+  }
+</style>
+<ba-card title="Options" baCardClass="with-scroll" *ngIf="displayOptions">
+  <div class="row">
+    <div class="col-md-8">
+     <!-- <button class="btn btn-primary btn-lg" (click)="dataCheck()">Data Check</button>
+      <button class="btn btn-primary btn-lg" (click)="updateData()">Update Data</button>-->
+    </div>
+    <div class="col-md-4">
+      <form (ngSubmit)="saveLastScreen()" #screenerSaveForm="ngForm" class="form-group">
+        <input type="text" class="form-control" [(ngModel)]="screenLabel" name="screenLabel" placeholder="screen" ngModel>
+        <input type="submit" class="btn btn-primary btn-lg pull-right" value="Save Screen">
+      </form>
+    </div>
+  </div>
+</ba-card>
+<!--<div *ngIf="showGrid">-->
+<!--<div style="clear: both;"></div>-->
+<!-- <div id="myGrid" ag-grid="$ctrl.gridOptions" style="height: 50vh;" class="ag-fresh"></div>-->
+<ba-card title="Screen Results" baCardClass="with-scroll">
+  <ag-grid-angular #agGrid
+                   style="width: 100%; height: 400px; text-align: left;"
+                   class="ag-fresh"
+                   [gridOptions]="gridOptions"
+  >
+  </ag-grid-angular>
+</ba-card>
+<!--</div>-->
+
+<!--
+                   [gridOptions]="gridOptions"
+
+                   [columnDefs]="columnDefs"
+                   [rowData]="rowData"
+                   enableColResize
+                   enableSorting
+                   enableFilter
+                   rowHeight="22"
+                   rowSelection="multiple"
+-->
+

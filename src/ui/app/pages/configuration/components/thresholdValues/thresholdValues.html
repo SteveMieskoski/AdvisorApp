@@ -1,0 +1,26 @@
+<div>
+  <form (ngSubmit)="saveThresholdValues()" #thresholdForm="ngForm">
+    <input class="btn btn-primary" type="submit" value="Save">
+    <i class="ion-help-circled help-tool pull-right" tooltip="{{helpText.thresholdValues}}"  placement="{{toolPlacement.thresholdValues}}"></i>
+    <div class="row">
+      <div class="col-md-3 " *ngFor="let key of thresholdValues | ObjNgFor ">
+        <ba-card title="{{key | camelsplit}}" baCardClass="with-scroll static-height">
+          <!--<h3>{{key}}</h3>-->
+          <div *ngFor="let innerKey of thresholdValues[key] | ObjNgFor ">
+       <span><label>{{innerKey}}
+         <span *ngFor="let item of thresholdValues[key][innerKey]; let i = index; trackBy:trackByIndex">
+           <br *ngIf="thresholdValues[key][innerKey].length === 1">
+           <br *ngIf="thresholdValues[key][innerKey].length > 1 && i === 0">
+           <br *ngIf="thresholdValues[key][innerKey].length > 1 && i === 1">
+           <!--<span *ngIf="thresholdValues[key][innerKey].length > 1 && i === 0"> from:  </span>-->
+           <span *ngIf="thresholdValues[key][innerKey].length > 1 && i === 1"> to:  </span>
+           <input type="text" class="cust-form-control-static" [(ngModel)]="thresholdValues[key][innerKey][i]"
+                  [ngModelOptions]="{standalone: true}">
+         </span>
+        </label></span>
+          </div>
+        </ba-card>
+      </div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,12 @@
+<div class="task-todo-container">
+  <div class="box-shadow-border"></div>
+
+  <ul class="todo-list">
+    <li *ngFor="let key of savedList  | ObjNgFor">
+      <div class="blur-container"><div class="blur-box" (click)="loadSaved(key)"></div></div>
+        <span class="cut-with-dots" >{{ key }}</span>
+    </li>
+  </ul>
+</div>
+
+

@@ -1,0 +1,138 @@
+import _ from 'lodash';
+
+let AltGridControllerInjectables = ['$scope', 'AltGridService'];
+
+export default class AltGridController {
+	constructor($scope, AltGridService) {
+		this.AltGridService = AltGridService;
+		this.$scope = $scope;
+		this.showGrid = false;
+	}
+
+
+	$onInit() {
+
+		if (_.size(this.parent.displayData) > 0) {
+			this.gridData = this.parent.displayData;
+			this.noData = false;
+			console.log(this.parent.displayData);
+			this.setup();
+		} else {
+
+		}
+
+
+	}
+
+
+	/**
+	 * =======================  SETUP METHODS ===============================
+	 */
+	dataCheck() {
+		console.log(this.parent.displayData);
+	}
+
+	setup() {
+		console.log('this.gridData', this.gridData);
+		let columnUnique = this.buildSelectLists(this.gridData);
+
+		this.prepareGridColumns(columnUnique)
+			.then((columnResponse) => {
+				this.columns = columnResponse;
+				//	this.gridOptions.columnDefs = columnResponse;
+				this.gridOptions = {
+					rowData: this.parent.displayData,
+					columnDefs: this.columns,
+					rowSelection: 'multiple',
+					enableColResize: true,
+					rowHeight: 22,
+					enableSorting: true,
+					enableFilter: true,
+				}
+				this.showGrid = true;
+			})
+			.catch((error) => {
+				console.log('prepare columns error', error);
+			});
+	}
+
+	gridSetup(columns) {
+		return {
+			rowData: this.parent.displayData,
+			columnDefs: columns
+		};
+	}
+
+	prepareGridColumns(options) {
+		//   console.log(options);
+		var columns = Object.keys(options);
+		var setupColumns = [];
+		let selectCol =  Promise.resolve({headerName: '', width: 30, checkboxSelection: true, suppressSorting: true,
+			suppressMenu: true, pinned: true});
+		setupColumns.push(selectCol);
+		for (let i = 0; i < columns.length; i++) {
+			setupColumns.push(this.AltGridService.columns(columns[i], options[columns[i]], this.parent.colorResults))
+		}
+		return Promise.all(setupColumns);
+	}
+
+
+	buildSelectLists(results) {
+		let columns = {};
+		if (results) {
+			console.log('SELECT LIST CREATE (WAS THROWING AN ERROR BEFORE)', results);
+			var keys = Object.keys(results[0]);
+			for (var j = 0; j < keys.length; j++) {
+				let noDisplay = ['_id', '__v', '_kind', 'created_at', 'updated_at', 'uid', 'Primary', 'alias'];
+				if (noDisplay.indexOf(keys[j]) === -1) {
+					columns[keys[j]] = _.map(results, keys[j]);
+				}
+			}
+			let noUniq = ['company', 'symbol'];
+			let valueColumns = {};
+			let tmp = [];
+			for (let prop in columns) {
+				if (_.has(columns[prop], 'value')) {
+					// not catching what's its supposed to.  re-initiated right below the else statement
+					if (noUniq.indexOf(prop) === -1) {
+						console.log('1', _.uniqBy(columns[prop], _.property('value')));
+						valueColumns[prop] = _.map(_.uniqBy(columns[prop], _.property('value')), _.property('value'));
+						//  tmp = _.uniqBy(columns[prop], 'value');
+						//  valueColumns[prop] = _.map(tmp, 'value');
+					} else {
+						console.log('2', _.uniqBy(columns[prop], _.property('value')));
+						valueColumns[prop] = columns[prop];
+					}
+				} else {
+					if (noUniq.indexOf(prop) === -1) {
+						if (_.has(_.sample(columns[prop]), 'value')) {
+							//     console.log('3',_.uniqBy(columns[prop], _.property('value')));
+							valueColumns[prop] = _.map(_.uniqBy(columns[prop], _.property('value')), _.property('value'));
+						} else {
+							valueColumns[prop] = _.uniq(columns[prop]);
+						}
+					} else {
+						//   console.log('4', _.uniqBy(columns[prop], _.property('value')));
+						valueColumns[prop] = columns[prop];
+					}
+				}
+			}
+			let selectCollections = {};
+			for (let prop in valueColumns) {
+				selectCollections[prop] = [];
+				_.forEach(valueColumns[prop], (value) => {
+					selectCollections[prop].push({label: value, value: value})
+				})
+			}
+			return selectCollections;
+		}
+
+	}
+
+
+
+
+
+}
+
+AltGridController.$inject = AltGridControllerInjectables;

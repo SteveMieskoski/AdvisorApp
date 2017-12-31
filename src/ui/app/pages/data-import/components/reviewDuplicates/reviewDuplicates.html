@@ -1,0 +1,25 @@
+<div class="modal-header">
+  Duplicates
+</div>
+<div class="modal-body">
+  <h3>Symbols with multiple entries</h3>
+  <!-- <button (click)="checkUpateValues()">check</button>-->
+   <i class="ion-help-circled help-tool pull-right" tooltip="{{helpText.reviewDuplicates}}"  placement="{{toolPlacement.reviewDuplicates}}"></i>
+   <ul >
+     <li *ngFor="let key of duplicateData | ObjNgFor">
+       <ul>
+         <li>{{key}}</li>
+         <li *ngFor="let item of duplicateData[key]; let j = index">
+           <span>Select: <input type="checkbox" [(ngModel)]="duplicateData[key][j].Primary" (change)="addToUpdateList(key, j)"></span><br>
+           <span>Symbol: {{item.symbol}}</span><br>
+           <span>Company: {{item.company}}</span><br>
+         </li>
+         <li>-------------------------------------------------</li>
+       </ul>
+     </li>
+
+   </ul>
+ </div>
+ <div class="modal-footer">
+   <button class="btn-primary" (click)="ok()">Done</button>
+ </div>

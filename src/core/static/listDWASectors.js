@@ -1,0 +1,1 @@
+module.exports = ["Internet","Finance","Banks","Healthcare","Biomedics/Genetics","Software","Machinery and Tools","Precious Metals","Chemicals","Gaming","Business Products","Utilities/Electricity","Metals Non Ferrous","Media","Building","Aerospace Airline","Retailing","Drugs","Oil","Semiconductors"]

@@ -1,0 +1,86 @@
+<div class="widgets">
+  <div *ngIf="!showCreateAccount" class="row">
+    <div class="col-md-12">
+      <ba-card>
+        <button type="button" class="btn btn-default btn-mm" (click)="showCreateNewAccount(true)">Create an account</button>
+      </ba-card>
+    </div>
+    <div class="col-md-12">
+      <ba-card title="Acount Upload" baCardClass="with-scroll">
+        <i class="ion-help-circled help-tool pull-right" tooltip="{{helpText.stocksUpload}}"
+           placement="{{toolPlacement.stocksUpload}}"></i>
+        <input #fileUploadInitial type="file" (change)="beforeFileUpload($event, 'initial')" name="file"
+               accept="SheetJSFT" [hidden]="true" [style.display]="'none'">
+        <div class="input-group" [ngClass]="{uploading: uploadFileInProgress}">
+          <input #inputTextInitial type="text" [value]="defaultValue" class="form-control" readonly>
+          <input #identifierText type="text" [value]="defaultValue" class="form-control">
+          <span class="input-group-btn">
+      <button class="btn btn-success btn-mm" type="button" (click)="bringFileSelector('initial');">Browse</button>
+          </span>
+        </div>
+        <div *ngIf="showPreparingfile.initial"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i> {{fileActionMessage}}
+        </div>
+        <div *ngIf="canUpload.initial">
+          <button *ngFor="let sheet of sheetsContained; let i=index;" class="btn btn-success" type="button"
+                  (click)="createFromSelectedSheet(i, sheet.content, 'initial')">
+            {{sheet.name}}
+          </button>
+        </div>
+        <h4 *ngIf="importActive.initial">Time Remaining: {{timerDisplayMinutes}}
+          Minutes {{timerDisplaySeconds}} Seconds</h4>
+      </ba-card>
+    </div>
+    <div class="col-md-12">
+      <ba-card title="Account Update" baCardClass="with-scroll">
+        <i class="ion-help-circled help-tool pull-right" tooltip="{{helpText.stocksUpdate}}"
+           placement="{{toolPlacement.stocksUpdate}}"></i>
+        <input #fileUploadUpdate type="file" (change)="beforeFileUpload($event, 'update')" name="file"
+               accept="SheetJSFT" [hidden]="true" [style.display]="'none'">
+        <div class="input-group" [ngClass]="{uploading: uploadFileInProgress}">
+          <input #inputTextUpdate type="text" [value]="defaultValue" class="form-control" readonly>
+          <input #identifierTextUpdate type="text" [value]="defaultValue" class="form-control" readonly>
+          <span class="input-group-btn">
+      <button class="btn btn-success btn-mm" type="button" (click)="bringFileSelector('update');">Browse</button>
+          </span>
+        </div>
+        <div *ngIf="showPreparingfile.update"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i> {{fileActionMessage}}
+        </div>
+        <div *ngIf="canUpload.update">
+          <button *ngFor="let sheet of sheetsContained; let i=index" class="btn btn-success" type="button"
+                  (click)="updateFromSelectedSheet(i,sheet.content)">
+            {{sheet.name}}
+          </button>
+        </div>
+        <h4 *ngIf="importActive.update">Time Remaining: {{timerDisplayMinutes}}
+          Minutes {{timerDisplaySeconds}} Seconds</h4>
+      </ba-card>
+    </div>
+    <div class="col-md-6">
+      <ba-card>
+        <button type="button" class="btn btn-default btn-mm" (click)="getAllAccounts()">Get Account List</button>
+        <div *ngFor="let ident of accountListing">
+          <button class="btn btn-default btn-mm" (click)="setAccountToUpdate(ident.identifier)">{{ident.identifier}}</button>
+        </div>
+      </ba-card>
+    </div>
+    <div class="col-md-6">
+      <ba-card>
+        <button type="button" class="btn btn-default btn-mm" (click)="getAllPositions()">Get Positions List</button>
+        <div *ngFor="let ident of positionListing">
+          <h5>{{ident.symbol}}</h5>
+        </div>
+      </ba-card>
+    </div>
+  </div>
+  <div *ngIf="showCreateAccount" class="row">
+    <div class="col-md-12">
+      <ba-card title="Create Account" baCardClass="with-scroll">
+        <input #createAccountInputOne type="text" [value]="defaultValue" class="form-control">
+        <input #createAccountInputTwo type="text" [value]="defaultValue" class="form-control">
+        <input #createAccountIdentifier type="text" [value]="defaultValue" class="form-control">
+        <button class="btn btn-default btn-mm" (click)="createNewAccount()">Create New Account</button>
+        <button class="btn btn-default btn-mm" (click)="showCreateNewAccount(false)">Cancel</button>
+      </ba-card>
+    </div>
+  </div>
+</div>

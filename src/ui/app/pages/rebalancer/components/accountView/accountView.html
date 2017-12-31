@@ -1,0 +1,59 @@
+<div class="widgets">
+  <div class="row">
+    <div class="col-md-12">
+      <ba-card title="Currently Selected Account" baCardClass="with-scroll">
+        <h2>{{currentActiveAccount}}</h2>
+      </ba-card>
+    </div>
+    <div class="col-md-12">
+      <ba-card title="Currently Selected Account Positions" baCardClass="with-scroll">
+        <table>
+          <tr>
+            <th>Symbol</th>
+            <th>Quantity</th>
+            <th>Cost Amount</th>
+            <th>Blended Unit Cost</th>
+            <th>Current Value</th>
+            <th>UnRealized Gain/Loss</th>
+            <th>% Gain/Loss</th>
+            <th>Generated Income</th>
+            <th>Current Yield</th>
+            <th>Open Data</th>
+            <th>Position Term</th>
+          </tr>
+        <tr *ngFor="let pos of accountContents">
+          <td>{{pos.symbol}}</td>
+          <td>{{pos.quantity}}</td>
+          <td>{{pos.costAmount}}</td>
+          <td>{{pos.blendedUnitCost}}</td>
+          <td>{{pos.value}}</td>
+          <td>{{pos.unrealized}}</td>
+          <td>{{pos.percentGainLoss}}</td>
+          <td>{{pos.income}}</td>
+          <td>{{pos.currentYield}}</td>
+          <td>{{pos.openDate}}</td>
+          <td>{{pos.term}}</td>
+        </tr>
+        </table>
+      </ba-card>
+    </div>
+    <div class="col-md-6">
+      <ba-card title="" baCardClass="with-scroll">
+        <h2>Future Feature</h2>
+        <h3>Ability to upload positions without save for ad hoc, theoretical, or other purposes</h3>
+      </ba-card>
+    </div>
+    <div class="col-md-6">
+      <ba-card title="Show Accounts" baCardClass="with-scroll">
+        <button type="button" class="btn btn-default btn-mm" (click)="getAllAccounts()">Get Account List</button>
+      </ba-card>
+    </div>
+    <div class="col-md-6">
+      <ba-card title="Select Account to View" baCardClass="with-scroll">
+        <div *ngFor="let ident of accountListing">
+          <button class="btn btn-default btn-mm" (click)="setCurrentActiveAccount(ident.identifier)">{{ident.identifier}}</button>
+        </div>
+      </ba-card>
+    </div>
+  </div>
+</div>

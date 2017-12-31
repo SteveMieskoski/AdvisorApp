@@ -1,0 +1,592 @@
+<!--<button (click)="check()">Check</button>
+<p>VARIABLE</p>-->
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 col-lg-4">
+      <button class="btn btn-success btn-mm" (click)="run()">Run</button>
+      <button class="btn btn-primary btn-mm" (click)="colored()">
+        Color Results -
+        <span *ngIf="colorResults">Yes</span>
+        <span *ngIf="!colorResults">No</span></button>
+     <!-- <button class="btn btn-success" (click)="check()">check</button> -->
+      <i class="ion-help-circled help-tool" tooltip="{{helpText.screenerTopOptions}}"  placement="{{toolPlacement.screenerTopOptions}}"></i>
+      <!--
+      #screenLabel="ngModel"
+      (keyup.enter)="update(box.value)"
+      (blur)="update(box.value)"
+      -->
+    </div>
+    <div class="col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4">
+      <i class="ion-help-circled help-tool pull-right" tooltip="{{helpText.screenerSaveScreen}}"  placement="{{toolPlacement.screenerSaveScreen}}"></i>
+      <form (ngSubmit)="saveBuiltScreen()" #screenLabelForm="ngForm">
+        <input type="text" [(ngModel)]="screenLabel" name="screenLabel" placeholder="label screen" ngModel>
+        <input type="submit" class="btn btn-primary btn-mm pull-right" value="Save Screen">
+      </form>
+    </div>
+  </div>
+    <div class="row">
+    <div class="col-md-6">
+
+      <ba-card title="Screen Parameters" baCardClass="with-scroll">
+        <i class="ion-help-circled pull-right" tooltip="{{helpText.screenerParameters}}"  placement="{{toolPlacement.screenerParameters}}"></i>
+        <div class="row">
+          <div class="col-md-6 col-lg-6">
+
+            <label for="symbol">Symbol<br>
+              <span *ngFor="let sym of screen.symbol; let i = index">{{sym}} <span class="glyphicon glyphicon-remove"
+                                                                                   (click)="removeSymbol(i)"></span>, </span>
+              <input class="form-control" type="text" [(ngModel)]="tempSymbol" id="symbol"
+                     [typeahead]="listSymbols"
+                     (typeaheadOnSelect)="addSymbolToScreen($event)">
+              <!-- typeahead="item as item for item in listSymbols | uppercase}" -->
+            </label>
+            <label for="company">Company<br>
+              <input class="form-control" type="text" [(ngModel)]="screen.company" id="company"
+                     [typeahead]="listCompanies">
+              <!-- uib-typeahead="state for state in listCompanies | filter:$viewValue | limitTo:8">-->
+            </label>
+            <label for="DWASector">DWA Sector<br>
+              <input class="form-control" type="text" [(ngModel)]="screen.DWASector" id="DWASector"
+                     [typeahead]="listDWASectors">
+              <!-- uib-typeahead="state for state in listDWASectors | filter:$viewValue | limitTo:8">-->
+            </label>
+            <label for="MacroSector">Macro Sector<br>
+              <input class="form-control" type="text" [(ngModel)]="screen.MacroSector" id="MacroSector"
+                     [typeahead]="listMacroSectors">
+              <!-- uib-typeahead="state for state in listMacroSectors | filter:$viewValue | limitTo:8">-->
+            </label>
+            <label for="IndustrySector">Industry Sector<br>
+              <input class="form-control" type="text" [(ngModel)]="screen.IndustrySector" id="IndustrySector"
+                     [typeahead]="listIndustryGroups">
+              <!--  uib-typeahead="state for state in IndustryGroups | filter:$viewValue | limitTo:8">-->
+            </label>
+            <label for="MarketPriceHigh">Market Price <br>
+              <input class="form-control" type="number" id="MarketPriceHigh"
+                     [(ngModel)]="screenNumeric.MarketPrice.high"
+                     placeholder="High">
+              <input class="form-control" type="number" id="MarketPriceLow"
+                     [(ngModel)]="screenNumeric.MarketPrice.low"
+                     placeholder="Low">
+            </label>
+            <br>
+            <label for="OptionableAny">Optionable - Any <br>
+              <input type="radio" id="OptionableAny" name="Optionable" [(ngModel)]="screen.Optionable"
+                     (change)="removeOptionableChoice()">
+            </label>
+            <br>
+            <label for="OptionableYes">Optionable - Yes <br>
+              <input type="radio" id="OptionableYes" name="Optionable"
+                     [(ngModel)]="screen.Optionable" [value]="true">
+            </label>
+            <br>
+            <label for="OptionableNo">Optionable - No <br>
+              <input type="radio" id="OptionableNo" name="Optionable"
+                     [(ngModel)]="screen.Optionable" [value]="false">
+            </label>
+            <br>
+            <label for="OptionableAny">All U.S. equities - Any <br>
+              <input type="radio" id="allUSAny" name="allUS"
+                     [(ngModel)]="screen.allUS" (change)="removeAllUSChoice()">
+            </label>
+            <br>
+            <label for="allUSYes">All U.S. equities - Yes <br>
+              <input type="radio" id="allUSYes" name="allUS"
+                     [(ngModel)]="screen.allUS" [value]="true">
+            </label>
+            <br>
+            <label for="allUSNo">All U.S. equities - No <br>
+              <input type="radio" id="allUSNo" name="allUS"
+                     [(ngModel)]="screen.allUS" [value]="false">
+            </label>
+            <br>
+            <label for="CScurr">Credit Suisse - current rating<br>
+              <ng-select id="CScurr"
+                         [allowClear]="true"
+                         [multiple]="true"
+                         [items]="screenOptions.CScurr"
+                         [disabled]="disabled"
+                         (data)="refreshValue($event, 'CScurr')"
+                         (selected)="selected($event)"
+                         (removed)="removed($event)"
+                         (typed)="typed($event)"
+                         placeholder="No rating selected">
+              </ng-select>
+              <!--<select> [(ngModel)]="screen.CScurr" id="CScurr" multiple>
+                      <option *ngFor="let item of screenOptions.CScurr" >{{item}}</option> </select>-->
+            </label>
+            <label for="Mcurr">Morningstar - current rating<br>
+              <ng-select id="Mcurr"
+                         [allowClear]="true"
+                         [multiple]="true"
+                         [items]="screenOptions.Mcurr"
+                         [disabled]="disabled"
+                         (data)="refreshValue($event, 'Mcurr')"
+                         (selected)="selected($event)"
+                         (removed)="removed($event)"
+                         (typed)="typed($event)"
+                         placeholder="No rating selected">
+              </ng-select>
+              <!--<select> [(ngModel)]="screen.Mcurr" id="Mcurr" multiple>
+              <option *ngFor="let item of screenOptions.Mcurr">{{item}}</option> </select>-->
+
+            </label>
+            <label for="WFScurr">Wells Fargo Securities - current rating<br>
+              <ng-select id="WFScurr"
+                         [allowClear]="true"
+                         [multiple]="true"
+                         [items]="screenOptions.WFScurr"
+                         [disabled]="disabled"
+                         (data)="refreshValue($event, 'WFScurr')"
+                         (selected)="selected($event)"
+                         (removed)="removed($event)"
+                         (typed)="typed($event)"
+                         placeholder="No rating selected">
+              </ng-select>
+              <!--<select> [(ngModel)]="screen.WFScurr" id="WFScurr" multiple>
+                      <option *ngFor="let item of screenOptions.WFScurr" >{{item}}</option> </select>-->
+            </label>
+            <label for="MQcurr">Morningstar Quant - valuation<br>
+              <ng-select id="MQcurr"
+                         [allowClear]="true"
+                         [multiple]="true"
+                         [items]="screenOptions.MQcurr"
+                         [disabled]="disabled"
+                         (data)="refreshValue($event, 'MQcurr')"
+                         (selected)="selected($event)"
+                         (removed)="removed($event)"
+                         (typed)="typed($event)"
+                         placeholder="No score selected">
+              </ng-select>
+              <!--<select> [(ngModel)]="screen.MQcurr" id="MQcurr" multiple>
+                      <option *ngFor="let item of screenOptions.MQcurr" >{{item}}</option> </select>-->
+            </label>
+
+            <label for="QC">Golden Capital Quant Score - core<br>
+              <ng-select id="QC"
+                         [allowClear]="true"
+                         [multiple]="true"
+                         [items]="screenOptions.QC"
+                         [disabled]="disabled"
+                         (data)="refreshValue($event, 'QC')"
+                         (selected)="selected($event)"
+                         (removed)="removed($event)"
+                         (typed)="typed($event)"
+                         placeholder="No score selected">
+              </ng-select>
+              <!--<select> [(ngModel)]="screen.QC" id="QC" multiple>
+              <option *ngFor="let item of screenOptions.QC">{{item}}</option> </select>-->
+
+            </label>
+            <label for="QG">Golden Capital Quant Score - growth<br>
+              <ng-select id="QG"
+                         [allowClear]="true"
+                         [multiple]="true"
+                         [items]="screenOptions.QG"
+                         [disabled]="disabled"
+                         (data)="refreshValue($event, 'QG')"
+                         (selected)="selected($event)"
+                         (removed)="removed($event)"
+                         (typed)="typed($event)"
+                         placeholder="No score selected">
+              </ng-select>
+              <!--<select> [(ngModel)]="screen.QG" id="QG" multiple>
+              <option *ngFor="let item of screenOptions.QG">{{item}}</option> </select>-->
+
+            </label>
+            <label for="QV">Golden Capital Quant Score - value<br>
+              <ng-select id="QV"
+                         [allowClear]="true"
+                         [multiple]="true"
+                         [items]="screenOptions.QV"
+                         [disabled]="disabled"
+                         (data)="refreshValue($event, 'QV')"
+                         (selected)="selected($event)"
+                         (removed)="removed($event)"
+                         (typed)="typed($event)"
+                         placeholder="No score selected">
+              </ng-select>
+              <!--<select> [(ngModel)]="screen.QV" id="QV" multiple>
+              <option *ngFor="let item of screenOptions.QV" >{{item}}</option> </select>-->
+
+            </label>
+          </div>
+          <div class="col-md-6">
+            <label for="TrendChartColumn">Trend Chart Column<br>
+              <ng-select id="TrendChartColumn"
+                         [allowClear]="true"
+                         [multiple]="true"
+                         [items]="screenOptions.TrendChartColumn"
+                         [disabled]="disabled"
+                         (data)="refreshValue($event, 'TrendChartColumn')"
+                         (selected)="selected($event)"
+                         (removed)="removed($event)"
+                         (typed)="typed($event)"
+                         placeholder="No Trend Chart Column selected">
+              </ng-select>
+              <!--<select> [(ngModel)]="screen.TrendChartColumn" id="TrendChartColumn" multiple>
+                      <option *ngFor="let item of screenOptions.TrendChartColumn" >{{item}}</option> </select>-->
+            </label>
+            <br>
+
+            <label for="PFTrend">PF Trend<br>
+              <ng-select id="PFTrend"
+                         [allowClear]="true"
+                         [multiple]="true"
+                         [items]="screenOptions.PFTrend"
+                         [disabled]="disabled"
+                         (data)="refreshValue($event, 'PFTrend')"
+                         (selected)="selected($event)"
+                         (removed)="removed($event)"
+                         (typed)="typed($event)"
+                         placeholder="No PF Trend selected">
+              </ng-select>
+              <!--<select> [(ngModel)]="screen.PFTrend" id="PFTrend" multiple>
+
+                      <option *ngFor="let item of screenOptions.PFTrend" >{{item}}</option> </select>-->
+            </label>
+            <br>
+
+            <label for="PFSignal">PF Signal<br>
+              <ng-select id="PFSignal"
+                         [allowClear]="true"
+                         [multiple]="true"
+                         [items]="screenOptions.PFSignal"
+                         [disabled]="disabled"
+                         (data)="refreshValue($event, 'PFSignal')"
+                         (selected)="selected($event)"
+                         (removed)="removed($event)"
+                         (typed)="typed($event)"
+                         placeholder="No PF Signal selected">
+              </ng-select>
+              <!--<select> [(ngModel)]="screen.PFSignal" id="PFSignal" multiple>
+                      <option *ngFor="let item of screenOptions.PFSignal" >{{item}}</option> </select>-->
+            </label>
+            <br>
+
+            <label for="RSSignal">RS Signal<br>
+              <ng-select id="RSSignal"
+                         [allowClear]="true"
+                         [multiple]="true"
+                         [items]="screenOptions.RSSignal"
+                         [disabled]="disabled"
+                         (data)="refreshValue($event, 'RSSignal')"
+                         (selected)="selected($event)"
+                         (removed)="removed($event)"
+                         (typed)="typed($event)"
+                         placeholder="No RS Signal selected">
+              </ng-select>
+              <!--<select> [(ngModel)]="screen.RSSignal" id="RSSignal" multiple>
+                      <option *ngFor="let item of screenOptions.RSSignal" >{{item}}</option> </select>-->
+            </label>
+            <br>
+
+            <label for="RSColumn">RS Column<br>
+              <ng-select id="RSColumn"
+                         [allowClear]="true"
+                         [multiple]="true"
+                         [items]="screenOptions.RSSignal"
+                         [disabled]="disabled"
+                         (data)="refreshValue($event, 'RSColumn')"
+                         (selected)="selected($event)"
+                         (removed)="removed($event)"
+                         (typed)="typed($event)"
+                         placeholder="No RS Column selected">
+              </ng-select>
+              <!--<select> [(ngModel)]="screen.RSColumn" id="RSColumn" multiple>
+                      <option *ngFor="let item of screenOptions.RSColumn" >{{item}}</option> </select>-->
+            </label>
+            <br>
+
+            <label for="PeerRSSignal">Peer RS Signal<br>
+              <ng-select id="PeerRSSignal"
+                         [allowClear]="true"
+                         [multiple]="true"
+                         [items]="screenOptions.RSSignal"
+                         [disabled]="disabled"
+                         (data)="refreshValue($event, 'PeerRSSignal')"
+                         (selected)="selected($event)"
+                         (removed)="removed($event)"
+                         (typed)="typed($event)"
+                         placeholder="No Peer RS Signal selected">
+              </ng-select>
+              <!--<select> [(ngModel)]="screen.PeerRSSignal" id="PeerRSSignal" multiple>
+                      <option *ngFor="let item of screenOptions.PeerRSSignal" >{{item}}</option> </select>-->
+            </label>
+            <br>
+
+            <label for="PeerRSColumn">Peer RS Column<br>
+              <ng-select id="PeerRSColumn"
+                         [allowClear]="true"
+                         [multiple]="true"
+                         [items]="screenOptions.RSSignal"
+                         [disabled]="disabled"
+                         (data)="refreshValue($event, 'PeerRSColumn')"
+                         (selected)="selected($event)"
+                         (removed)="removed($event)"
+                         (typed)="typed($event)"
+                         placeholder="No Peer RS Column selected">
+              </ng-select>
+              <!--<select> [(ngModel)]="screen.PeerRSColumn" id="PeerRSColumn" multiple>
+                      <option *ngFor="let item of screenOptions.PeerRSColumn" >{{item}}</option> </select>-->
+            </label>
+            <br>
+
+            <label for="YieldHigh">Yield <br>
+              <input class="form-control" type="number" id="YieldHigh" [(ngModel)]="screenNumeric.Yield.high"
+                     placeholder="High">
+              <input class="form-control" type="number" id="YieldLow" [(ngModel)]="screenNumeric.Yield.low"
+                     placeholder="Low">
+            </label>
+            <br>
+
+
+            <label for="PEGHigh"> PEG <br>
+              <input class="form-control" type="number" id="PEGHigh" [(ngModel)]="screenNumeric.PEG.high"
+                     placeholder="High">
+              <input class="form-control" type="number" id="PEGLow" [(ngModel)]="screenNumeric.PEG.low"
+                     placeholder="Low">
+            </label>
+
+
+            <label for="WeeklyMomentumHigh">Weekly Momentum <br>
+              <input class="form-control" type="number" id="WeeklyMomentumHigh"
+                     [(ngModel)]="screenNumeric.WeeklyMomentum.high" placeholder="High">
+              <input class="form-control" type="number" id="WeeklyMomentumLow"
+                     [(ngModel)]="screenNumeric.WeeklyMomentum.low"
+                     placeholder="Low">
+            </label>
+            <br>
+
+            <label for="WeeklyDistributionHigh">Weekly Distribution <br>
+              <input class="form-control" type="number" id="WeeklyDistributionHigh"
+                     [(ngModel)]="screenNumeric.WeeklyDistribution.high" placeholder="High">
+              <input class="form-control" type="number" id="WeeklyDistributionLow"
+                     [(ngModel)]="screenNumeric.WeeklyDistribution.low" placeholder="Low">
+            </label>
+            <br>
+
+            <label for="TwoHundredDayMAHigh"> 200 Day Moving Avg. <br>
+              <input class="form-control" type="number" id="TwoHundredDayMAHigh"
+                     [(ngModel)]="screenNumeric.TwoHundredDayMA.high" placeholder="High">
+              <input class="form-control" type="number" id="TwoHundredDayMALow"
+                     [(ngModel)]="screenNumeric.TwoHundredDayMA.low" placeholder="Low">
+            </label>
+            <label for="chgVsSPHigh">Price change YTD vs S&P 500
+              <input class="form-control" type="number" id="chgVsSPHigh" [(ngModel)]="screenNumeric.chgVsSP.high"
+                     placeholder="High">
+              <input class="form-control" type="number" id="chgVsSPLow" [(ngModel)]="screenNumeric.chgVsSP.low"
+                     placeholder="Low">
+            </label>
+            <label for="TechAttribScoreHigh">Tech Attrib / Score
+              <input class="form-control" type="number" id="TechAttribScoreHigh"
+                     [(ngModel)]="screenNumeric.TechAttribScore.high" placeholder="High">
+              <input class="form-control" type="number" id="TechAttribScoreLow"
+                     [(ngModel)]="screenNumeric.TechAttribScore.low" placeholder="Low">
+            </label>
+          </div>
+
+        </div>
+      </ba-card>
+    </div>
+    <div class="col-md-6 col-lg-6">
+      <ba-card title="Fields to Return" baCardClass="with-scroll">
+        <button class="btn btn-success" (click)="selectAll()">Select All</button>
+        <button class="btn btn-success" (click)="unSelectAll()">Clear Selected</button>
+        <i class="ion-help-circled pull-right" tooltip="{{helpText.screenerReturnFields}}"  placement="{{toolPlacement.screenerReturnFields}}"></i>
+        <div class="input-demo checkbox-demo row">
+          <div class="col-md-6 container-content">
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.symbol">
+              <span>Symbol</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.company">
+              <span>Company</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.MacroSector">
+              <span>Macro Sector</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.IndustrySector">
+              <span>Industry Sector</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.MarketPrice">
+              <span>Market Price</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.DWASector">
+              <span>DWA Sector</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.Category">
+              <span>Category</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.TechAttribScore">
+              <span>Tech Attrib Score</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.TrendChartColumn">
+              <span>Trend Chart Column</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.PFTrend">
+              <span>Point & Figure Trend</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.PFSignal">
+              <span>Point & Figure Signal</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.RSSignal">
+              <span>RS Signal</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.RSColumn">
+              <span>RS Column</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.PeerRSSignal">
+              <span>Peer RS Signal</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.PeerRSColumn">
+              <span> Peer RS Column</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.WeeklyMomentum">
+              <span>Weekly Momentum</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.WeeklyDistribution">
+              <span>Weekly Distribution</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.TwoHundredDayMA">
+              <span>200 Day Moving Average</span>
+            </label><br>
+
+          </div>
+
+          <div class="col-md-6">
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.VertPriceObj">
+              <span>Vert Price Obj</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.RewardRisk">
+              <span>Reward Risk</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.Yield">
+              <span>Yield</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.UserNote">
+              <span>User Note</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.Optionable">
+              <span>Optionable</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.allUS">
+              <span>All U.S. equities</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.leastOneBuy">
+              <span>Buy rated by at least one fundamental provider</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.DividendYield">
+              <span>Dividend Yield (TTM)</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.PEG">
+              <span>PEG</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.chgVsSP">
+              <span>Price change YTD vs S&P 500</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.CScurr">
+              <span>Credit Suisse - current rating</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.Mcurr">
+              <span>Morningstar - current rating</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.WFScurr">
+              <span>Wells Fargo Securities - current rating</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.MQcurr">
+              <span>  Morningstar Quant - valuation</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.QC">
+              <span>Golden Capital Quant Score - core</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.QG">
+              <span>Golden Capital Quant Score - growth</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.QV">
+              <span>Golden Capital Quant Score - value</span>
+            </label><br>
+          </div>
+        </div>
+      </ba-card>
+
+    </div>
+
+
+  </div>
+</div>
+
+
+<br>
+
+
+<!--<p>COMBINED ENUM AND NUMERIC</p>
+<input type="text" [(ngModel)]="screen.TechAttribScore">
+
+
+<input type="text" [(ngModel)]="screen.UserNote">-->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

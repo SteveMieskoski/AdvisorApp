@@ -1,0 +1,180 @@
+import _ from 'lodash';
+import keyRelationships from "../../../static/hardCoded_or_inputManually/field_to_schema_keys_relations.js"
+
+
+let AltGridServiceInjectables = [];
+
+export class AltGridService {
+	constructor() {
+	}
+
+	normalizeFieldValue(raw, withColors, colorCheck) {
+		console.log(raw);
+		if (withColors && colorCheck) {
+
+			return raw + '.value';
+		} else {
+			return raw;
+		}
+	}
+
+	// ============  Column Definitions ====================
+
+	columns(key, selectables, withColors) {
+		return new Promise((resolve, reject) => {
+				let pinned = ['symbol', 'company'];
+				let percents = ['greenPercent', 'yellowPercent', 'redPercent'];
+				let singles = ['greenColor', 'yellowColor', 'redColor'];
+				if (singles.indexOf(key) >= 0) {
+					let singlesData = {
+						headerName: singles[singles.indexOf(key)],
+						field: this.normalizeFieldValue(key, withColors, false)
+					};
+					resolve(singlesData)
+				} else if (percents.indexOf(key) >= 0) {
+					let percentsData = {
+						headerName: singles[singles.indexOf(key)],
+						field: this.normalizeFieldValue(key, withColors, false),
+						cellRenderer: this.percentCellRenderer
+					};
+					resolve(percentsData)
+				} else if (pinned.indexOf(key) >= 0) {
+					let pinnedData = {
+						headerName: pinned[pinned.indexOf(key)],
+						field: this.normalizeFieldValue(key, withColors, false),
+						pinned: true
+					};
+					resolve(pinnedData)
+				} else {
+					let valuesData;
+					let numeric = ['chgVsSP', 'PEG', 'DividendYield', 'QC', 'QV', 'QG'];
+					if (numeric.indexOf(key) >= 0) {
+						valuesData = {
+							headerName: keyRelationships.wellsScreener[key],
+							field: this.normalizeFieldValue(key, withColors, true)
+						};
+						resolve(valuesData)
+					} else {
+						valuesData = {
+							headerName: keyRelationships.wellsScreener[key],
+							field: this.normalizeFieldValue(key, withColors, true)
+						};
+						//  console.log('values data', valuesData);
+						resolve(valuesData)
+					}
+
+				}
+
+
+			})
+	}
+
+	percentCellRenderer(params) {
+		var value = params.value;
+
+		var eDivPercentBar = document.createElement('div');
+		eDivPercentBar.className = 'div-percent-bar';
+		eDivPercentBar.style.width = value + '%';
+		if (value < 20) {
+			eDivPercentBar.style.backgroundColor = 'red';
+		} else if (value < 60) {
+			eDivPercentBar.style.backgroundColor = '#ff9900';
+		} else {
+			eDivPercentBar.style.backgroundColor = '#00A000';
+		}
+
+		var eValue = document.createElement('div');
+		eValue.className = 'div-percent-value';
+		eValue.innerHTML = value + '%';
+
+		var eOuterDiv = document.createElement('div');
+		eOuterDiv.className = 'div-outer-div';
+		eOuterDiv.appendChild(eDivPercentBar);
+		eOuterDiv.appendChild(eValue);
+
+		return eOuterDiv;
+	}
+
+
+	proficfilterExample(){
+		/*var PROFICIENCY_TEMPLATE =
+			'<label style="padding-left: 4px;">' +
+			'<input type="radio" name="RANDOM"/>' +
+			'PROFICIENCY_NAME' +
+			'</label>';
+
+		var PROFICIENCY_NONE = 'none';
+		var PROFICIENCY_ABOVE40 = 'above40';
+		var PROFICIENCY_ABOVE60 = 'above60';
+		var PROFICIENCY_ABOVE80 = 'above80';
+
+		var PROFICIENCY_NAMES = ['No Filter', 'Above 40%', 'Above 60%', 'Above 80%'];
+		var PROFICIENCY_VALUES = [PROFICIENCY_NONE, PROFICIENCY_ABOVE40, PROFICIENCY_ABOVE60, PROFICIENCY_ABOVE80];
+
+		function ProficiencyFilter() {
+		}
+
+		ProficiencyFilter.prototype.init = function (params) {
+			this.filterChangedCallback = params.filterChangedCallback;
+			this.selected = PROFICIENCY_NONE;
+			this.valueGetter = params.valueGetter;
+		};
+
+		ProficiencyFilter.prototype.getModel = function () {
+
+		};
+
+		ProficiencyFilter.prototype.setModel = function (model) {
+
+		};
+
+		ProficiencyFilter.prototype.getGui = function () {
+			var eGui = document.createElement('div');
+			var eInstructions = document.createElement('div');
+			eInstructions.innerHTML = FILTER_TITLE.replace('TITLE_NAME', 'Custom Proficiency Filter');
+			eGui.appendChild(eInstructions);
+
+			var random = '' + Math.random();
+
+			var that = this;
+			PROFICIENCY_NAMES.forEach( function (name, index) {
+				var eFilter = document.createElement('div');
+				var html = PROFICIENCY_TEMPLATE.replace('PROFICIENCY_NAME', name).replace('RANDOM', random);
+				eFilter.innerHTML = html;
+				var eRadio = eFilter.querySelector('input');
+				if (index === 0) {
+					eRadio.checked = true;
+				}
+				eGui.appendChild(eFilter);
+
+				eRadio.addEventListener('click', function () {
+					that.selected = PROFICIENCY_VALUES[index];
+					that.filterChangedCallback();
+				});
+			});
+
+			return eGui;
+		};
+
+		ProficiencyFilter.prototype.doesFilterPass = function (params) {
+
+			var value = this.valueGetter(params);
+			var valueAsNumber = parseFloat(value);
+
+			switch (this.selected) {
+				case PROFICIENCY_ABOVE40 : return valueAsNumber >= 40;
+				case PROFICIENCY_ABOVE60 : return valueAsNumber >= 60;
+				case PROFICIENCY_ABOVE80 : return valueAsNumber >= 80;
+				default : return true;
+			}
+
+		};
+
+		ProficiencyFilter.prototype.isFilterActive = function () {
+			return this.selected !== PROFICIENCY_NONE;
+		};
+		*/
+	}
+}
+
+AltGridService.$inject = AltGridServiceInjectables;

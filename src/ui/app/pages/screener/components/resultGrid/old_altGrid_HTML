@@ -1,0 +1,5 @@
+<button ng-click="$ctrl.dataCheck()">Data Check</button>
+<div ng-if="$ctrl.showGrid">
+    <div id="myGrid" ag-grid="$ctrl.gridOptions" style="height: 50vh;" class="ag-fresh"></div>
+
+  </div>

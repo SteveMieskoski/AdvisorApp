@@ -1,0 +1,1 @@
+module.exports = require('./config/prior_config/webpack.dev.js');

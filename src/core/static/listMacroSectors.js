@@ -1,0 +1,1 @@
+module.exports = ["Consumer discretionary","Financials","Health care","Information technology","Consumer staples","Materials","Industrials","Utilities","Energy","--","Telecommunication services","Real estate"]

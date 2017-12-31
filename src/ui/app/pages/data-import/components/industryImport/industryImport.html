@@ -1,0 +1,87 @@
+<!--
+<div class="widgets">
+  <div class="row">
+    <div class="col-md-12">
+      <ba-card title="Industry Groups Upload" baCardClass="with-scroll">
+        <i class="ion-help-circled help-tool pull-right" tooltip="{{helpText.industryUpload}}"
+           placement="{{toolPlacement.industryUpload}}"></i>
+
+        <input #fileUpload type="file" (change)="beforeFileUpload($event)" name="file" accept="SheetJSFT"
+               [hidden]="true" [style.display]="'none'">
+        <div class="input-group" [ngClass]="{uploading: uploadFileInProgress}">
+          <input #inputText type="text" [value]="defaultValue" class="form-control" readonly>
+          <span class="input-group-btn">
+      <button class="btn btn-success btn-mm" type="button" (click)="bringFileSelector();">Browse</button>
+          </span>
+        </div>
+        <div *ngIf="showPreparingfile"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i> {{fileActionMessage}}</div>
+        <div *ngIf="canUpload">
+          <button *ngFor="let sheet of sheetsContained; let i=index;" class="btn btn-success" type="button"
+                  (click)="createFromSelectedSheet(i, sheet.content)">
+            {{sheet.name}}
+          </button>
+        </div>
+        <h4 *ngIf="importActive">Time Remaining: {{timerDisplayMinutes}}
+          Minutes  {{timerDisplaySeconds}} Seconds</h4>
+      </ba-card>
+
+    </div>
+
+  </div>
+</div>-->
+<div class="widgets">
+  <div class="row">
+    <div class="col-md-12">
+      <ba-card title="Industry Groups Upload" baCardClass="with-scroll">
+        <i class="ion-help-circled help-tool pull-right" tooltip="{{helpText.stocksUpload}}"
+           placement="{{toolPlacement.stocksUpload}}"></i>
+        <input #fileUploadInitial type="file" (change)="beforeFileUpload($event, 'initial')" name="file"
+               accept="SheetJSFT" [hidden]="true" [style.display]="'none'">
+        <div class="input-group" [ngClass]="{uploading: uploadFileInProgress}">
+          <input #inputTextInitial type="text" [value]="defaultValue" class="form-control" readonly>
+          <span class="input-group-btn">
+      <button class="btn btn-success btn-mm" type="button" (click)="bringFileSelector('initial');">Browse</button>
+          </span>
+        </div>
+        <div *ngIf="showPreparingfile.initial"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i> {{fileActionMessage}}</div>
+        <div *ngIf="canUpload.initial">
+          <button *ngFor="let sheet of sheetsContained; let i=index;" class="btn btn-success" type="button"
+                  (click)="createFromSelectedSheet(i, sheet.content, 'initial')">
+            {{sheet.name}}
+          </button>
+        </div>
+        <!--        <button *ngIf="canUpload.initial" class="btn btn-success" type="button" (click)="runUploadFile('initial')">
+                  Import
+                </button>-->
+        <h4 *ngIf="importActive.initial">Time Remaining: {{timerDisplayMinutes}}
+          Minutes {{timerDisplaySeconds}} Seconds</h4>
+      </ba-card>
+    </div>
+    <div class="col-md-12">
+      <ba-card title="Industry Groups Update" baCardClass="with-scroll">
+        <i class="ion-help-circled help-tool pull-right" tooltip="{{helpText.stocksUpdate}}"
+           placement="{{toolPlacement.stocksUpdate}}"></i>
+        <input #fileUploadUpdate type="file" (change)="beforeFileUpload($event, 'update')" name="file"
+               accept="SheetJSFT" [hidden]="true" [style.display]="'none'">
+        <div class="input-group" [ngClass]="{uploading: uploadFileInProgress}">
+          <input #inputTextUpdate type="text" [value]="defaultValue" class="form-control" readonly>
+          <span class="input-group-btn">
+      <button class="btn btn-success btn-mm" type="button" (click)="bringFileSelector('update');">Browse</button>
+          </span>
+        </div>
+        <div *ngIf="showPreparingfile.update"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i> {{fileActionMessage}}</div>
+        <div *ngIf="canUpload.update">
+          <button *ngFor="let sheet of sheetsContained; let i=index" class="btn btn-success" type="button"
+                  (click)="updateFromSelectedSheet(i,sheet.content, 'update')">
+            {{sheet.name}}
+          </button>
+        </div>
+        <h4 *ngIf="importActive.update">Time Remaining: {{timerDisplayMinutes}}
+          Minutes {{timerDisplaySeconds}} Seconds</h4>
+      </ba-card>
+    </div>
+    <!-- <div class="col-md-12">
+       <button class="btn" (click)="navCheck()">NAV CHECK</button>
+     </div>-->
+  </div>
+</div>

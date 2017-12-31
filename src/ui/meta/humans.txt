@@ -1,0 +1,17 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+  Steve Mieskoski
+
+# THANKS
+
+  <name>
+  Steve Mieskoski
+  design and layout thanks to Akveo Team (akveo.com)
+
+
+# TECHNOLOGY COLOPHON
+
+  HTML5, CSS3, Bootstrap
+  Angular2, TypeScript, Webpack

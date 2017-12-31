@@ -1,0 +1,17 @@
+#====================================  CONFIGURATION VARIABLES ===============================================================
+ENV_CONFIG_FILE_VERSION=0.01
+ENV_CONFIG_FILE_UPDATED=20170622
+#Server Config
+PORT=9000
+DEPLOY_STATE=development
+DEPLOY_SOURCE=developmentAngular
+ENVIRONMENT=development
+DEV_FRONT_END_CODE=../../../build
+SYS_ENV=local
+
+#==================================== GENERATED SEMI STATIC FILES BASE PATH ===============================================================
+BASE_PATH=../../../../screener/static/importGenerated/
+
+#==================================== GENERATED SEMI STATIC FILES ===============================================================
+TICKER_TO_COMPANY_NAME=ticker_companyName_list.js
+INDUSTRY_GROUPS=IndustryGroups.js

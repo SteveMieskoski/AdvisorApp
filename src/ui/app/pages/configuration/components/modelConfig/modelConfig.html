@@ -1,0 +1,31 @@
+<div class="widgets">
+  <ba-card title="Amount Allocated: {{portfolioTotal}}%" baCardClass="with-scroll">
+    <i class="ion-help-circled help-tool pull-right" tooltip="{{helpText.modelPortfolio}}"  placement="{{toolPlacement.modelPortfolio}}"></i>
+    <div class="row">
+      <div class="col-md-12">
+        <!-- <h5 *ngIf="portfolioTotal">Amount Allocated: {{portfolioTotal}}%</h5>-->
+        <h5 *ngIf="!portfolioTotal">Amount Allocated: 0%</h5>
+        <div class="text-danger" *ngIf="portfolioTotal > 100">Over 100% Allocated</div>
+      </div>
+      <!--<div class="col-md-4">-->
+      <div class="col-md-3" *ngFor="let key of modelPortfolio | ObjNgFor">
+        <label for="modelPortfolio">{{key}}</label>
+        <input type="number" class="form-control" [(ngModel)]="modelPortfolio[key]" id="modelPortfolio"
+               (change)="updateTotal()">
+      </div>
+      <!-- </div> -->
+      <!-- <div class="col-md-12">
+         <h5 *ngIf="portfolioTotal">Amount Allocated: {{portfolioTotal}}%</h5>
+         <h5 *ngIf="!portfolioTotal">Amount Allocated: 0%</h5>
+         <div class="md-warn" *ngIf="portfolioTotal > 100">Over 100% Allocated</div>
+       </div>-->
+    </div>
+  </ba-card>
+  <div class="row">
+    <div class="col-md-12">
+      <div>
+        <button class="btn btn-primary" (click)="setModelPortfolio(modelPortfolio)">Save Values</button>
+      </div>
+    </div>
+  </div>
+</div>

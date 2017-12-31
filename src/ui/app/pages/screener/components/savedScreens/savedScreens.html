@@ -1,0 +1,173 @@
+<div id="SavedScreensPage" class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <ba-card title="Saved Screens" baCardClass="with-scroll">
+        <button class="btn btn-primary btn-mm" (click)="colored()">Color Results - <span *ngIf="colorResults">Yes</span><span
+                *ngIf="!colorResults">No</span></button>
+        <br>
+        <hr>
+      <ul>
+        <li *ngFor="let key of savedScreens  | ObjNgFor">{{key}}
+          <button class="btn btn-primary btn-mm" (click)="loadSaved(key)">Load</button>
+          <button class="btn btn-primary btn-mm" (click)="deleteSaved(key)">Delete</button>
+        </li>
+      </ul>
+      </ba-card>
+    </div>
+    <div class="col-md-6">
+      <ba-card title="Fields to Return" baCardClass="with-scroll">
+        <button class="btn btn-success" (click)="selectAll()">Select All</button>
+        <button class="btn btn-success" (click)="unSelectAll()">Clear Selected</button>
+        <div class="input-demo checkbox-demo row">
+          <div class="col-md-6 container-content">
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.symbol">
+              <span>Symbol</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.company">
+              <span>Company</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.MacroSector">
+              <span>Macro Sector</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.IndustrySector">
+              <span>Industry Sector</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.MarketPrice">
+              <span>Market Price</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.DWASector">
+              <span>DWA Sector</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.Category">
+              <span>Category</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.TechAttribScore">
+              <span>Tech Attrib Score</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.TrendChartColumn">
+              <span>Trend Chart Column</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.PFTrend">
+              <span>Point & Figure Trend</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.PFSignal">
+              <span>Point & Figure Signal</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.RSSignal">
+              <span>RS Signal</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.RSColumn">
+              <span>RS Column</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.PeerRSSignal">
+              <span>Peer RS Signal</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.PeerRSColumn">
+              <span> Peer RS Column</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.WeeklyMomentum">
+              <span>Weekly Momentum</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.WeeklyDistribution">
+              <span>Weekly Distribution</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.TwoHundredDayMA">
+              <span>200 Day Moving Average</span>
+            </label><br>
+
+          </div>
+
+          <div class="col-md-6">
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.VertPriceObj">
+              <span>Vert Price Obj</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.RewardRisk">
+              <span>Reward Risk</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.Yield">
+              <span>Yield</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.UserNote">
+              <span>User Note</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.Optionable">
+              <span>Optionable</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.allUS">
+              <span>All U.S. equities</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.leastOneBuy">
+              <span>Buy rated by at least one fundamental provider</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.DividendYield">
+              <span>Dividend Yield (TTM)</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.PEG">
+              <span>PEG</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.chgVsSP">
+              <span>Price change YTD vs S&P 500</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.CScurr">
+              <span>Credit Suisse - current rating</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.Mcurr">
+              <span>Morningstar - current rating</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.WFScurr">
+              <span>Wells Fargo Securities - current rating</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.MQcurr">
+              <span>  Morningstar Quant - valuation</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.QC">
+              <span>Golden Capital Quant Score - core</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.QG">
+              <span>Golden Capital Quant Score - growth</span>
+            </label><br>
+            <label class="checkbox-inline custom-checkbox nowrap">
+              <input type="checkbox" [(ngModel)]="display.QV">
+              <span>Golden Capital Quant Score - value</span>
+            </label><br>
+          </div>
+        </div>
+      </ba-card>
+    </div>
+
+  </div>
+</div>
