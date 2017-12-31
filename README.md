@@ -22,6 +22,6 @@
     - npm run start:electron
     
 ### Technologies
-Uses Akveo Blur for design and layout.
-Election and Angular for UI
-Sqlite with Sequelize for data storage and retrieval. 
+-   Uses Akveo Blur for design and layout.
+-   Election and Angular for UI
+-   Sqlite with Sequelize for data storage and retrieval. 
